@@ -2,6 +2,9 @@ package com.example.demo22.Model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -25,8 +28,6 @@ public class Product {
     @Column(name = "size", length = 50)
     private String size;
 
-    @Column(name = "color", length = 50)
-    private String color;
 
     @Column(name = "gender", length = 50)
     private String gender;
@@ -34,24 +35,24 @@ public class Product {
     @Column(name = "status")
     private Integer status;
 
-    @Column(name = "idCategory", nullable = false)
-    private int idCategory;
+    @Column(name = "id_category", nullable = false) // Update as needed
+    private Integer id_category;
+
 
     // Constructors
     public Product() {
     }
 
-    public Product(String id, String name, int price, int quantity, String material, String size, String color, String gender, Integer status, int idCategory) {
+    public Product(String id, String name, int price, int quantity, String material, String size, String gender, Integer status, int id_category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.material = material;
         this.size = size;
-        this.color = color;
         this.gender = gender;
         this.status = status;
-        this.idCategory = idCategory;
+        this.id_category = id_category;
     }
 
     // Getters and Setters
@@ -103,13 +104,7 @@ public class Product {
         this.size = size;
     }
 
-    public String getColor() {
-        return color;
-    }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public String getGender() {
         return gender;
@@ -128,11 +123,11 @@ public class Product {
     }
 
     public int getIdCategory() {
-        return idCategory;
+        return id_category;
     }
 
     public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+        this.id_category = idCategory;
     }
 
     @Override
@@ -144,10 +139,31 @@ public class Product {
                 ", quantity=" + quantity +
                 ", material='" + material + '\'' +
                 ", size='" + size + '\'' +
-                ", color='" + color + '\'' +
                 ", gender='" + gender + '\'' +
                 ", status=" + status +
-                ", idCategory=" + idCategory +
+                ", idCategory=" + id_category +
                 '}';
+    }
+    @OneToMany(fetch = FetchType.EAGER)  // Đổi thành EAGER để load images ngay
+    @JoinColumn(name = "idProduct", referencedColumnName = "id")
+    private List<Images> images = new ArrayList<>(); // Khởi tạo list trống
+    public List<Images> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Images> images) {
+        this.images = images;
+    }
+
+    // Thêm phương thức tiện ích để lấy ảnh thumbnail
+    public String getThumbnailUrl() {
+        if (images != null && !images.isEmpty()) {
+            return images.stream()
+                    .filter(img -> Boolean.TRUE.equals(img.getIsThumbnailImage()))
+                    .findFirst()
+                    .map(Images::getImageUrl)
+                    .orElse(images.get(0).getImageUrl());
+        }
+        return null;
     }
 }
