@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/assets/**")
+            registry.addResourceHandler("/src/assets/**")
                     .addResourceLocations("classpath:/assets/")
                     .setCachePeriod(3600)
                     .resourceChain(true);
