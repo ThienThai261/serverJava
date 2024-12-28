@@ -126,6 +126,14 @@ public class Product {
         return id_category;
     }
 
+    public Integer getId_category() {
+        return id_category;
+    }
+
+    public void setId_category(Integer id_category) {
+        this.id_category = id_category;
+    }
+
     public void setIdCategory(int idCategory) {
         this.id_category = idCategory;
     }
