@@ -3,7 +3,6 @@ package com.example.demo22.Controller;
 import com.example.demo22.Model.Accounts;
 import com.example.demo22.Rep.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -11,7 +10,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = "/demo")
 @CrossOrigin(origins = "*")
-public class MainController {
+public class AccountController {
     @Autowired
     private UserRepository userRepository;
 
@@ -57,5 +56,25 @@ public class MainController {
         }
     }
 
+    @PutMapping("/updateStatus/{id}")
+    public @ResponseBody String updateAccountStatus(
+            @PathVariable("id") int id,
+            @RequestParam int status) {
+        try {
+            Optional<Accounts> accountOptional = userRepository.findById(id);
 
+            if (!accountOptional.isPresent()) {
+                throw new IllegalArgumentException("Account with ID " + id + " does not exist.");
+            }
+
+            Accounts account = accountOptional.get();
+            account.setStatus(status);
+            userRepository.save(account);
+
+            return "Account status updated successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to update account status: " + e.getMessage();
+        }
+    }
 }
