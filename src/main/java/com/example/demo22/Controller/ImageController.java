@@ -3,6 +3,7 @@ package com.example.demo22.Controller;
 import com.example.demo22.Model.Images;
 import com.example.demo22.Rep.ImageRepository;
 import com.example.demo22.Rep.ProductRepository;
+import com.example.demo22.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/images")
+@RequestMapping("/imgs")
 @CrossOrigin(origins = "*")
 public class ImageController {
 
@@ -26,6 +27,9 @@ public class ImageController {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ImageService imageService;
+
 
     private final String UPLOAD_DIR = "src/main/resources/assets/images/product_img/";
 
@@ -111,6 +115,13 @@ public class ImageController {
             return ResponseEntity.internalServerError()
                     .body("Failed to delete image. Error: " + e.getMessage());
         }
+    }
+    @GetMapping
+    List<Images> getListImg() { return imageService.getListImg(); }
+
+    @GetMapping("/{id}")
+    Images getImg(@PathVariable("id") int id) {
+        return imageService.getImg(id);
     }
 
     private String getFileExtension(String fileName) {

@@ -3,7 +3,6 @@ package com.example.demo22.Controller;
 import com.example.demo22.Model.Accounts;
 import com.example.demo22.Rep.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -11,7 +10,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = "/demo")
 @CrossOrigin(origins = "*")
-public class MainController {
+public class AccountController {
     @Autowired
     private UserRepository userRepository;
 

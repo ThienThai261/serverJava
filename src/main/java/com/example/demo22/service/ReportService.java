@@ -26,16 +26,16 @@ public class ReportService {
         this.userRepository = userRepository;
     }
 
-    public SalesReportDTO getSalesReport(String startDate, String endDate) {
-        // Query doanh thu từ Order và OrderDetail
-        List<Order> orders = orderRepository.findByDateRange(startDate, endDate);
-        double totalRevenue = orders.stream()
-                .flatMap(order -> order.getOrderDetails().stream())
-                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
-                .sum();
-
-        return new SalesReportDTO(totalRevenue, startDate, endDate);
-    }
+//    public SalesReportDTO getSalesReport(String startDate, String endDate) {
+//        // Query doanh thu từ Order và OrderDetail
+//        List<Order> orders = orderRepository.findByDateRange(startDate, endDate);
+//        double totalRevenue = orders.stream()
+//                .flatMap(order -> order.getOrderDetails().stream())
+//                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
+//                .sum();
+//
+//        return new SalesReportDTO(totalRevenue, startDate, endDate);
+//    }
 
     public List<InventoryReportDTO> getInventoryReport() {
         // Lấy tồn kho từ Product

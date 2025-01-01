@@ -30,13 +30,13 @@ public class ReportController {
     }
 
     // Báo cáo doanh thu theo thời gian
-    @GetMapping("/sales")
-    public ResponseEntity<SalesReportDTO> getSalesReport(
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate) {
-        SalesReportDTO report = reportService.getSalesReport(startDate, endDate);
-        return ResponseEntity.ok(report);
-    }
+//    @GetMapping("/sales")
+//    public ResponseEntity<SalesReportDTO> getSalesReport(
+//            @RequestParam(required = false) String startDate,
+//            @RequestParam(required = false) String endDate) {
+//        SalesReportDTO report = reportService.getSalesReport(startDate, endDate);
+//        return ResponseEntity.ok(report);
+//    }
 
     // Báo cáo tồn kho sản phẩm
     @GetMapping("/inventory")

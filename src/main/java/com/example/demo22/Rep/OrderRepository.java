@@ -13,5 +13,4 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByDateBuyBetween(Date startDate, Date endDate);
     List<Order> findByDateBuyBetweenAndStatus(Date startDate, Date endDate, int status);
 
-    List<Order> findByDateRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }
