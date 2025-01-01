@@ -1,5 +1,6 @@
 package com.example.demo22.Model;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -31,6 +32,7 @@ public class Images {
     }
 
     // Getters and Setters
+
     public int getId() {
         return id;
     }
@@ -54,6 +56,7 @@ public class Images {
     public void setSource(String source) {
         this.source = source;
     }
+
 
     public Boolean getIsThumbnailImage() {
         return isThumbnailImage;
@@ -88,4 +91,5 @@ public class Images {
         }
         return null;
     }
+
 }

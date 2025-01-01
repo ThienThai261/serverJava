@@ -20,4 +20,6 @@ public class ImageService {
         return imageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found"));
     }
+
 }
+
