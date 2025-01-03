@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/cate")
+@CrossOrigin(origins = "*")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
     // API Lấy tất cả danh mục
-    @GetMapping
+    @GetMapping("/all")
     public List<Category> getCategories() {
         return categoryService.getAllCategories();
     }
