@@ -1,6 +1,8 @@
 package com.example.demo22.Controller;
 
+import com.example.demo22.Model.AccessLevels;
 import com.example.demo22.Model.Accounts;
+import com.example.demo22.Rep.AccessLevelsRepository;
 import com.example.demo22.Rep.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,8 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AccessLevelsRepository accessLevelsRepository;
 
     @PostMapping(path = "/add")
     public @ResponseBody String addNewUser(@RequestParam String username,
@@ -21,16 +25,37 @@ public class AccountController {
                                            @RequestParam String fullname,
                                            @RequestParam String phone,
                                            @RequestParam int status) {
-        Accounts accounts = new Accounts(); // Updated to 'Accounts'
-        accounts.setUsername(username);
-        accounts.setPassword(password);
-        accounts.setEmail(email);
-        accounts.setFullname(fullname);
-        accounts.setPhone(phone);;
-        accounts.setStatus(status);
+        try {
+            System.out.println("Received signup request:");
+            System.out.println("Username: " + username);
+            System.out.println("Email: " + email);
+            System.out.println("Fullname: " + fullname);
+            System.out.println("Phone: " + phone);
+            System.out.println("Status: " + status);
+            // Create and save the account
+            Accounts account = new Accounts();
+            account.setUsername(username);
+            account.setPassword(password);
+            account.setEmail(email);
+            account.setFullname(fullname);
+            account.setPhone(phone);
+            account.setStatus(status);
 
-        userRepository.save(accounts);
-        return "Saved";
+            Accounts savedAccount = userRepository.save(account);
+
+            // Create and save the access level
+            AccessLevels accessLevel = new AccessLevels();
+            accessLevel.setRole(1); // Default role = 1
+            accessLevel.setIdAccount(savedAccount.getId());
+
+            accessLevelsRepository.save(accessLevel);
+
+            return "Account and Access Level saved successfully.";
+        } catch (Exception e) {
+            System.out.println("Error in signup: " + e.getMessage());
+            e.printStackTrace();
+            return "Error while saving account: " + e.getMessage();
+        }
     }
 
     @GetMapping(path = "/all")
@@ -75,6 +100,59 @@ public class AccountController {
         } catch (Exception e) {
             e.printStackTrace();
             return "Failed to update account status: " + e.getMessage();
+        }
+    }
+    @PutMapping("/changePassword/{id}")
+    public @ResponseBody String changePassword(
+            @PathVariable("id") int id,
+            @RequestParam String oldPassword,
+            @RequestParam String newPassword) {
+        try {
+            Optional<Accounts> accountOptional = userRepository.findById(id);
+
+            if (!accountOptional.isPresent()) {
+                throw new IllegalArgumentException("Account with ID " + id + " does not exist.");
+            }
+
+            Accounts account = accountOptional.get();
+
+            // Verify old password matches
+            if (!account.getPassword().equals(oldPassword)) {
+                return "Current password is incorrect";
+            }
+
+            // Update password
+            account.setPassword(newPassword);
+            userRepository.save(account);
+
+            return "Password updated successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to update password: " + e.getMessage();
+        }
+    }
+
+    @PutMapping("/updateInfo/{id}")
+    public @ResponseBody String updateUserInfo(
+            @PathVariable("id") int id,
+            @RequestParam String fullname,
+            @RequestParam String phone) {
+        try {
+            Optional<Accounts> accountOptional = userRepository.findById(id);
+
+            if (!accountOptional.isPresent()) {
+                throw new IllegalArgumentException("Account with ID " + id + " does not exist.");
+            }
+
+            Accounts account = accountOptional.get();
+            account.setFullname(fullname);
+            account.setPhone(phone);
+            userRepository.save(account);
+
+            return "User information updated successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to update user information: " + e.getMessage();
         }
     }
 }
